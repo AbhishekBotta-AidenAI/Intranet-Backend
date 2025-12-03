@@ -16,7 +16,7 @@ APP_HOST = config("APP_HOST", default="0.0.0.0")
 # CORS Configuration
 ALLOWED_ORIGINS: List[str] = config(
     "ALLOWED_ORIGINS",
-    default="http://localhost:5173,http://localhost:3000",
+    default="http://localhost:5173,http://localhost:3000,https://intranet-eight-iota.vercel.app",
     cast=lambda x: [url.strip() for url in x.split(",")]
 )
 
