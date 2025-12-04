@@ -41,7 +41,7 @@ def get_documents(
     """
     query = db.query(Document)
     if location:
-        query = query.filter(Document.location == location)
+        query = query.filter(Document.location.ilike(f"%{location}%"))
     
     total = query.count()
     documents = query.offset(skip).limit(limit).all()
