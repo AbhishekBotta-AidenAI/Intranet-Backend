@@ -29,16 +29,23 @@ def create_document(
 def get_documents(
     skip: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=1000),
+    location: str = Query(None, description="Filter documents by location"),
     db: Session = Depends(get_db)
 ):
     """
-    Get all HR policy documents with pagination
+    Get all HR policy documents with pagination and optional location filter
     
     - **skip**: Number of documents to skip (default: 0)
     - **limit**: Maximum number of documents to return (default: 100, max: 1000)
+    - **location**: Location to filter documents by (e.g., "India", "USA")
     """
-    total = db.query(Document).count()
-    documents = db.query(Document).offset(skip).limit(limit).all()
+    query = db.query(Document)
+    if location:
+        query = query.filter(Document.location == location)
+    
+    total = query.count()
+    documents = query.offset(skip).limit(limit).all()
+    
     return {
         "total": total,
         "documents": documents

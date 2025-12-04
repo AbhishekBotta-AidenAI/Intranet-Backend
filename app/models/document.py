@@ -9,6 +9,7 @@ class Document(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(255), nullable=False, index=True)
     description = Column(Text, nullable=True)
+    location = Column(String(100), nullable=False, index=True, default='India') # Added location field
     last_updated = Column(DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
     link = Column(String(500), nullable=False)  # SharePoint link
     created_at = Column(DateTime, nullable=False, server_default=func.now())
