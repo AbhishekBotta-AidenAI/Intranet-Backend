@@ -10,9 +10,8 @@ class AttachmentMeta(BaseModel):
     size: int
     is_image: bool
     created_at: datetime
-    model_config = {
-        "from_attributes": True
-    }
+    class Config:
+        orm_mode = True
 
 
 class ReactionSchema(BaseModel):
@@ -20,9 +19,8 @@ class ReactionSchema(BaseModel):
     user: str
     reaction: str
     created_at: datetime
-    model_config = {
-        "from_attributes": True
-    }
+    class Config:
+        orm_mode = True
 
 
 class ReplySchema(BaseModel):
@@ -30,9 +28,8 @@ class ReplySchema(BaseModel):
     user: str
     content: str
     created_at: datetime
-    model_config = {
-        "from_attributes": True
-    }
+    class Config:
+        orm_mode = True
 
 
 class ShareSchema(BaseModel):
@@ -40,9 +37,8 @@ class ShareSchema(BaseModel):
     user: str
     platform: Optional[str]
     created_at: datetime
-    model_config = {
-        "from_attributes": True
-    }
+    class Config:
+        orm_mode = True
 
 
 class PostBase(BaseModel):
@@ -76,14 +72,12 @@ class PostResponse(BaseModel):
     replies_count: int = 0
     shares_count: int = 0
     liked_users: List[str] = []
-    model_config = {
-        "from_attributes": True
-    }
+    class Config:
+        orm_mode = True
 
 
 class PostListResponse(BaseModel):
     total: int
     posts: List[PostResponse]
-    model_config = {
-        "from_attributes": True
-    }
+    class Config:
+        orm_mode = True
