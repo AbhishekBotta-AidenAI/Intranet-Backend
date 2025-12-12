@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
 from app.database import Base, engine
 from app.routes import documents
+from app.routes import posts
 
 # Create all database tables
 Base.metadata.create_all(bind=engine)
@@ -26,6 +27,7 @@ app.add_middleware(
 
 # Include routes
 app.include_router(documents.router)
+app.include_router(posts.router)
 
 @app.get("/")
 def read_root():
