@@ -72,7 +72,10 @@ class PostResponse(BaseModel):
     replies_count: int = 0
     shares_count: int = 0
     liked_users: List[str] = []
+<<<<<<< HEAD
     seen_by: List[str] = []
+=======
+>>>>>>> 2d155ee4c776e7b26c9617f34e8cc7fdeec83214
     class Config:
         orm_mode = True
 
