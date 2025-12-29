@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form
+from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form, Request
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from typing import Optional
 from typing import List, Optional
@@ -335,11 +335,28 @@ def add_reaction(post_id: int, user: str = Form(...), reaction: str = Form(...),
 
 
 @router.delete("/{post_id}/reactions", status_code=status.HTTP_200_OK)
-def remove_reaction(post_id: int, user: str = Form(...), reaction: str = Form(...), db: Session = Depends(get_db)):
-    """Remove a reaction (e.g., unlike) by post, user and reaction type."""
+async def remove_reaction(post_id: int, request: Request, db: Session = Depends(get_db)):
+    """Remove a reaction (e.g., unlike) by post, user and reaction type.
+
+    Accepts parameters as form-data or as query parameters to accommodate
+    DELETE requests from browsers/clients that send query params.
+    """
     p = db.query(Post).filter(Post.id == post_id).first()
     if not p:
         raise HTTPException(status_code=404, detail="Post not found")
+
+    # Try to read form data (if client sent form body)
+    form = {}
+    try:
+        form = await request.form()
+    except Exception:
+        form = {}
+
+    user = form.get('user') or request.query_params.get('user')
+    reaction = form.get('reaction') or request.query_params.get('reaction')
+
+    if not user or not reaction:
+        raise HTTPException(status_code=400, detail="Missing 'user' or 'reaction' parameter")
 
     existing = db.query(Reaction).filter(
         Reaction.post_id == post_id,
